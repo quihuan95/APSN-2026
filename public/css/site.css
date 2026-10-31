@@ -1,0 +1,315 @@
+:root {
+    --ink: #123a66;
+    --muted: #4d7196;
+    --paper: #e7f3fb;
+    --card: #ffffff;
+    --line: #c5dff2;
+    --blue: #1d6cb5;
+    --blue-deep: #0e4f86;
+    --sky: #d4ebf8;
+    --danger: #9d2c2c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    color: var(--ink);
+    background:
+        linear-gradient(180deg, #f4faff 0%, var(--paper) 280px);
+    font-family: "Segoe UI", "Be Vietnam Pro", sans-serif;
+    line-height: 1.55;
+}
+
+a { color: var(--blue); }
+
+.skyline {
+    position: relative;
+    background: #8ec8ef;
+    line-height: 1.2;
+}
+
+.skyline img {
+    display: block;
+    width: 100%;
+    height: clamp(220px, 34vw, 380px);
+    object-fit: cover;
+    object-position: center top;
+}
+
+.skyline-copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 46%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--blue-deep);
+    padding: 8px 16px 0;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.eyebrow {
+    margin: 0;
+    font-size: clamp(12px, 1.5vw, 16px);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 650;
+}
+
+.skyline-title {
+    margin: 4px 0 0;
+    font-size: clamp(26px, 4.6vw, 52px);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.skyline-event,
+.skyline-meta {
+    margin: 6px 0 0;
+    font-size: clamp(12px, 1.5vw, 16px);
+    font-weight: 600;
+}
+
+.nav-inner,
+.wrap {
+    width: min(1080px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+nav {
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    backdrop-filter: blur(8px);
+}
+
+.nav-inner {
+    display: flex;
+    gap: 6px;
+    padding: 8px 0;
+    overflow-x: auto;
+}
+
+.nav-inner a {
+    text-decoration: none;
+    color: var(--ink);
+    padding: 8px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    font-size: 15px;
+}
+
+.nav-inner a.active,
+.nav-inner a:hover {
+    background: var(--sky);
+    color: var(--blue-deep);
+}
+
+.wrap { padding: 28px 0 64px; }
+
+.hero h1,
+.page h1 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: 0 0 12px;
+    color: var(--blue-deep);
+}
+
+.lede { font-size: 17px; max-width: 72ch; }
+
+.deadlines {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 22px 0 8px;
+}
+
+.deadlines article,
+.card,
+.room {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(14, 79, 134, 0.05);
+}
+
+.deadlines article { padding: 14px 16px; }
+.deadlines small { color: var(--muted); display: block; }
+.deadlines strong { font-size: 15px; color: var(--blue-deep); }
+
+form { margin-top: 22px; display: grid; gap: 16px; }
+
+.section {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(14, 79, 134, 0.05);
+}
+
+.section h2 {
+    margin: 0;
+    padding: 12px 18px;
+    background: linear-gradient(90deg, var(--blue-deep), var(--blue));
+    color: white;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+}
+
+.section .body { padding: 8px 18px 18px; }
+
+.hint { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+
+.field { margin-top: 16px; }
+.field > span,
+.choice-title {
+    display: block;
+    font-weight: 650;
+    margin-bottom: 6px;
+}
+
+.req { color: var(--danger); }
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #b7d4ea;
+    border-radius: 10px;
+    background: #f8fcff;
+    font: inherit;
+    color: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #8ec4ee;
+    border-color: var(--blue);
+}
+
+textarea { min-height: 90px; resize: vertical; }
+
+.choices { display: grid; gap: 8px; }
+.choices label,
+.check label {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.other-line { display: flex; gap: 8px; align-items: center; }
+.other-line input[type="text"] { max-width: 320px; }
+
+.grid {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+}
+
+.grid th,
+.grid td {
+    border-bottom: 1px solid var(--line);
+    padding: 10px 8px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.grid th:not(:first-child),
+.grid td:not(:first-child) { text-align: center; width: 90px; }
+
+.error {
+    color: var(--danger);
+    font-size: 13px;
+    margin: 6px 0 0;
+}
+
+.banner {
+    background: #fde8e4;
+    border: 1px solid #f0c2ba;
+    color: #6e241c;
+    padding: 12px 14px;
+    border-radius: 12px;
+}
+
+.actions { display: flex; gap: 12px; align-items: center; }
+
+button {
+    background: linear-gradient(180deg, #2a7ec8, var(--blue-deep));
+    color: white;
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+button:hover { background: var(--blue-deep); }
+
+.note { color: var(--muted); font-size: 14px; }
+
+.prose { max-width: 74ch; }
+.prose p { margin: 0 0 14px; }
+.prose h2 { margin: 26px 0 8px; font-size: 22px; color: var(--blue-deep); }
+
+.rooms { display: grid; gap: 14px; }
+.room { padding: 16px 18px; }
+.room h3 { margin: 0 0 6px; color: var(--blue-deep); }
+.meta { color: var(--blue); font-size: 14px; font-weight: 650; }
+
+.facts {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 16px;
+}
+
+.card { padding: 16px 18px; }
+.card ul { margin: 8px 0 0; padding-left: 18px; }
+
+footer {
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    background: #f7fbfe;
+    font-size: 13px;
+    padding: 18px 0 28px;
+}
+
+.hotel { margin-top: 28px; }
+.hotel > h2 { margin: 0 0 6px; color: var(--blue-deep); }
+.hotel > .rooms { margin-top: 14px; }
+
+.book {
+    display: inline-block;
+    margin-top: 14px;
+    background: linear-gradient(180deg, #2a7ec8, var(--blue-deep));
+    color: white;
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-weight: 650;
+}
+
+.book:hover { background: var(--blue-deep); color: white; }
+
+@media (max-width: 760px) {
+    .deadlines, .facts { grid-template-columns: 1fr; }
+    .skyline img { height: 210px; }
+    .skyline-copy { height: 42%; }
+    .skyline-event { display: none; }
+    .other-line { flex-wrap: wrap; }
+}
