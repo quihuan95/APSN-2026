@@ -15,16 +15,14 @@ class EnsureAdminAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $isSessionAuthenticated = $request->session()->get('admin_authenticated') === true;
+
         $username = (string) config('apsn.admin.username');
         $password = (string) config('apsn.admin.password');
 
-        if ($username === '' || $password === '') {
-            abort(503, 'Admin credentials are not configured.');
-        }
-
-        $isSessionAuthenticated = $request->session()->get('admin_authenticated') === true;
-
-        $isBasicAuthenticated = $request->getUser() !== null
+        $isBasicAuthenticated = $username !== ''
+            && $password !== ''
+            && $request->getUser() !== null
             && hash_equals($username, (string) $request->getUser())
             && hash_equals($password, (string) $request->getPassword());
 
@@ -36,6 +34,10 @@ class EnsureAdminAuthenticated
             }
 
             return redirect()->guest(route('admin.login'));
+        }
+
+        if ($username === '' || $password === '') {
+            abort(503, 'Admin credentials are not configured.');
         }
 
         $response = $next($request);

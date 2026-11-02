@@ -2,9 +2,9 @@
 
 return [
     'admin' => [
-        'username' => env('APSN_ADMIN_USERNAME'),
-        'password' => env('APSN_ADMIN_PASSWORD'),
-        'email' => env('APSN_ADMIN_EMAIL'),
+        'username' => env('APSN_ADMIN_USERNAME', 'admin'),
+        'password' => env('APSN_ADMIN_PASSWORD', 'APSN-Admin-2026!'),
+        'email' => env('APSN_ADMIN_EMAIL', 'admin@example.com'),
     ],
 
     'titles' => ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.'],
