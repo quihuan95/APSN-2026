@@ -1,18 +1,21 @@
 <x-mail::message>
-# Registration Confirmed
+    Dear {{ $registration->full_name }},
 
-Dear {{ $registration->full_name }},
+    Your registration has been received. Please save this email for future reference.
 
-Thank you for registering for the **APSN Forum 2026 and APSN Council Meeting 2026** in Ho Chi Minh City, Viet Nam.
+    **Event:** The APEC Port Services Network (APSN) Forum 2026 and APSN Council Meeting 2026<br>
+    **Date:** December 14th – 18th, 2026<br>
+    **Venue:** Rex Hotel Saigon - Ho Chi Minh City, Viet Nam
 
-**Registration details**
+    **Registration Details:**<br>
+    **Registration ID.:** APSN-{{ str_pad((string) $registration->id, 4, '0', STR_PAD_LEFT) }}<br>
+    **Full name:** {{ $registration->full_name }}<br>
+    **Affiliation:** {{ $registration->organization }}<br>
+    **Country:** {{ $registration->economy }}<br>
+    **Email:** {{ $registration->email }}
 
-- APEC Economy: {{ $registration->economy }}
-- Organization: {{ $registration->organization }}
-- Contact email: {{ $registration->email }}
+    We look forward to seeing you in Ho Chi Minh City!
 
-The Secretariat will contact you with further event information. Please keep this email for your records.
-
-Thanks,<br>
-APSN Forum 2026 Secretariat
+    Kind regards,<br>
+    APSN 2026 Registration Team
 </x-mail::message>

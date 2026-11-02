@@ -56,7 +56,14 @@ class RegistrationTest extends TestCase
         $this->assertSame('Tran Van An', Registration::first()->full_name);
         $this->assertSame('visa@example.com', Registration::first()->visa_email);
         Storage::assertExists(Registration::first()->passport_copy_path);
-        Mail::assertSent(RegistrationConfirmation::class, 'an@example.com');
+        Mail::assertSent(RegistrationConfirmation::class, function (RegistrationConfirmation $mail): bool {
+            $rendered = $mail->render();
+
+            return str_contains($rendered, 'Your registration has been received')
+                && str_contains($rendered, 'Registration ID.:')
+                && str_contains($rendered, 'Rex Hotel Saigon')
+                && str_contains($rendered, 'Tran Van An');
+        });
         Mail::assertSent(NewRegistrationNotification::class, 'admin@example.com');
     }
 
