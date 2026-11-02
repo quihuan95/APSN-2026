@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewRegistrationNotification;
+use App\Mail\RegistrationConfirmation;
 use App\Models\Registration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -37,8 +40,13 @@ class RegistrationController extends Controller
             'passport_number' => ['required', 'string', 'max:50'],
             'passport_expiry' => ['required', 'date', 'after:today'],
             'passport_copy' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
-            'visa_status' => ['required', Rule::in([...config('apsn.visa_statuses'), 'other'])],
-            'visa_status_other' => ['nullable', 'required_if:visa_status,other', 'string', 'max:255'],
+            'visa_status' => ['required', Rule::in(config('apsn.visa_statuses'))],
+            'visa_email' => [
+                Rule::excludeUnless($request->input('visa_status') === config('apsn.e_visa_status')),
+                Rule::requiredIf($request->input('visa_status') === config('apsn.e_visa_status')),
+                'email',
+                'max:255',
+            ],
             'sessions' => ['required', 'array'],
             'arrival_at' => ['nullable', 'date'],
             'arrival_flight' => ['nullable', 'string', 'max:50'],
@@ -60,14 +68,18 @@ class RegistrationController extends Controller
         if ($data['title'] !== 'other') {
             $data['title_other'] = null;
         }
-        if ($data['visa_status'] !== 'other') {
-            $data['visa_status_other'] = null;
-        }
         if ($data['dietary'] !== 'other') {
             $data['dietary_other'] = null;
         }
 
         $registration = Registration::create($data);
+
+        Mail::to($registration->email)->send(new RegistrationConfirmation($registration));
+
+        $adminEmail = config('apsn.admin.email');
+        if (is_string($adminEmail) && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
+            Mail::to($adminEmail)->send(new NewRegistrationNotification($registration));
+        }
 
         return redirect()
             ->route('register.thanks')
@@ -78,4 +90,4 @@ class RegistrationController extends Controller
     {
         return view('pages.thanks');
     }
-};
+}

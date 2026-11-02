@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Mail\NewRegistrationNotification;
+use App\Mail\RegistrationConfirmation;
 use App\Models\Registration;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -15,6 +18,8 @@ class RegistrationTest extends TestCase
     public function test_registration_is_stored(): void
     {
         Storage::fake();
+        Mail::fake();
+        config()->set('apsn.admin.email', 'admin@example.com');
 
         $response = $this->post(route('register.store'), [
             'title' => 'Dr.',
@@ -30,8 +35,8 @@ class RegistrationTest extends TestCase
             'passport_number' => 'E998877',
             'passport_expiry' => '2031-06-01',
             'passport_copy' => UploadedFile::fake()->create('passport.pdf', 120, 'application/pdf'),
-            'visa_status' => 'other',
-            'visa_status_other' => 'Visa on arrival',
+            'visa_status' => 'Will apply for e-visa',
+            'visa_email' => 'visa@example.com',
             'sessions' => [
                 'forum' => 'Yes',
                 'technical_visit' => 'Yes',
@@ -49,13 +54,26 @@ class RegistrationTest extends TestCase
         $response->assertRedirect(route('register.thanks'));
         $this->assertSame(1, Registration::count());
         $this->assertSame('Tran Van An', Registration::first()->full_name);
+        $this->assertSame('visa@example.com', Registration::first()->visa_email);
         Storage::assertExists(Registration::first()->passport_copy_path);
+        Mail::assertSent(RegistrationConfirmation::class, 'an@example.com');
+        Mail::assertSent(NewRegistrationNotification::class, 'admin@example.com');
+    }
+
+    public function test_e_visa_email_is_required_for_e_visa_applicants(): void
+    {
+        $response = $this->post(route('register.store'), [
+            'visa_status' => 'Will apply for e-visa',
+        ]);
+
+        $response->assertSessionHasErrors('visa_email');
+        $this->assertSame(0, Registration::count());
     }
 
     public function test_content_pages_load(): void
     {
         $this->get(route('register'))->assertOk()->assertSee('APSN Forum 2026');
-        $this->get(route('register.thanks'))->assertOk()->assertSee('Đăng ký tham dự đã được ghi nhận');
+        $this->get(route('register.thanks'))->assertOk()->assertSee('Your registration has been received');
         $this->get(route('ho-chi-minh'))->assertOk()->assertSee('Thành phố Hồ Chí Minh');
         $this->get(route('rex'))->assertOk()->assertSee('Presidential Suite');
         $this->get(route('satellite'))->assertOk()->assertSee('Saigon Prince Hotel');

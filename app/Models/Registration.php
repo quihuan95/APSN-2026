@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\RegistrationFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Registration extends Model
 {
+    /** @use HasFactory<RegistrationFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'title_other',
@@ -22,7 +27,7 @@ class Registration extends Model
         'passport_expiry',
         'passport_copy_path',
         'visa_status',
-        'visa_status_other',
+        'visa_email',
         'sessions',
         'arrival_at',
         'arrival_flight',
@@ -48,4 +53,4 @@ class Registration extends Model
             'consent' => 'boolean',
         ];
     }
-};
+}

@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'admin' => [
+        'username' => env('APSN_ADMIN_USERNAME'),
+        'password' => env('APSN_ADMIN_PASSWORD'),
+        'email' => env('APSN_ADMIN_EMAIL'),
+    ],
+
     'titles' => ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.'],
 
     'genders' => ['Male', 'Female'],
@@ -32,7 +38,6 @@ return [
     'roles' => [
         'Council member',
         'Government official',
-        'Speaker',
         'Industry/NMP',
     ],
 
@@ -46,8 +51,10 @@ return [
         'Visa-exempt',
         'ABTC with "VNM" entry',
         'Diplomatic or official passport exemption',
-        'Will apply for e-visa (Please check the box and enter your email in the other below)',
+        'Will apply for e-visa',
     ],
+
+    'e_visa_status' => 'Will apply for e-visa',
 
     'sessions' => [
         'forum' => 'APSN Forum (15 Dec)',
@@ -60,7 +67,6 @@ return [
     'diets' => ['Vegetarian', 'Halal', 'No Seafood'],
 
     'deadlines' => [
-        'Speaker/Panellist' => '6 November 2026',
         'NMP (Non Member Participant)' => '10 November 2026',
         'Other participants' => '15 November 2026',
     ],

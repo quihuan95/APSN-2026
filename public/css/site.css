@@ -6,51 +6,51 @@
 :root {
     /* Color Palette - Maritime & International Diplomatic */
     --navy-950: #061325;
-    --navy-900: #0A1E36;
-    --navy-850: #0D284B;
+    --navy-900: #0a1e36;
+    --navy-850: #0d284b;
     --navy-800: #123762;
-    --navy-700: #1B4C82;
+    --navy-700: #1b4c82;
 
-    --blue-600: #1D6CB5;
-    --blue-500: #2584D8;
-    --blue-400: #4CA4ED;
-    --blue-100: #E1EFFB;
-    --blue-50:  #F0F7FD;
+    --blue-600: #1d6cb5;
+    --blue-500: #2584d8;
+    --blue-400: #4ca4ed;
+    --blue-100: #e1effb;
+    --blue-50: #f0f7fd;
 
-    --cyan-600: #0891B2;
-    --cyan-500: #06B6D4;
-    --cyan-400: #22D3EE;
-    --cyan-100: #CFFAFE;
-    --cyan-50:  #ECFEFF;
+    --cyan-600: #0891b2;
+    --cyan-500: #06b6d4;
+    --cyan-400: #22d3ee;
+    --cyan-100: #cffafe;
+    --cyan-50: #ecfeff;
 
-    --gold-600: #B45309;
-    --gold-500: #D97706;
-    --gold-400: #F59E0B;
-    --gold-100: #FEF3C7;
-    --gold-50:  #FFFBEB;
+    --gold-600: #b45309;
+    --gold-500: #d97706;
+    --gold-400: #f59e0b;
+    --gold-100: #fef3c7;
+    --gold-50: #fffbeb;
 
     --emerald-700: #047857;
     --emerald-600: #059669;
-    --emerald-500: #10B981;
-    --emerald-100: #D1FAE5;
-    --emerald-50:  #ECFDF5;
+    --emerald-500: #10b981;
+    --emerald-100: #d1fae5;
+    --emerald-50: #ecfdf5;
 
-    --rose-700: #BE123C;
-    --rose-600: #E11D48;
-    --rose-100: #FFE4E6;
-    --rose-50:  #FFF1F2;
+    --rose-700: #be123c;
+    --rose-600: #e11d48;
+    --rose-100: #ffe4e6;
+    --rose-50: #fff1f2;
 
-    --slate-900: #0F172A;
-    --slate-800: #1E293B;
+    --slate-900: #0f172a;
+    --slate-800: #1e293b;
     --slate-700: #334155;
     --slate-600: #475569;
-    --slate-500: #64748B;
-    --slate-400: #94A3B8;
-    --slate-300: #CBD5E1;
-    --slate-200: #E2E8F0;
-    --slate-100: #F1F5F9;
-    --slate-50:  #F8FAFC;
-    --white:     #FFFFFF;
+    --slate-500: #64748b;
+    --slate-400: #94a3b8;
+    --slate-300: #cbd5e1;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+    --slate-50: #f8fafc;
+    --white: #ffffff;
 
     /* Semantic Tokens */
     --text-primary: var(--slate-900);
@@ -58,9 +58,9 @@
     --text-muted: var(--slate-500);
     --text-inverse: var(--white);
 
-    --bg-page: #F6F9FD;
+    --bg-page: #f6f9fd;
     --bg-card: var(--white);
-    --border-card: #DCE6F1;
+    --border-card: #dce6f1;
     --border-light: var(--slate-200);
 
     --radius-sm: 6px;
@@ -70,15 +70,21 @@
     --radius-pill: 9999px;
 
     --shadow-subtle: 0 1px 3px rgba(10, 30, 54, 0.05);
-    --shadow-card: 0 8px 24px -4px rgba(10, 30, 54, 0.08), 0 2px 6px -1px rgba(10, 30, 54, 0.04);
-    --shadow-card-hover: 0 14px 34px -4px rgba(10, 30, 54, 0.12), 0 4px 12px -2px rgba(10, 30, 54, 0.06);
+    --shadow-card:
+        0 8px 24px -4px rgba(10, 30, 54, 0.08),
+        0 2px 6px -1px rgba(10, 30, 54, 0.04);
+    --shadow-card-hover:
+        0 14px 34px -4px rgba(10, 30, 54, 0.12),
+        0 4px 12px -2px rgba(10, 30, 54, 0.06);
     --shadow-pop: 0 20px 40px -8px rgba(10, 30, 54, 0.18);
 
     --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Base Reset */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -92,7 +98,16 @@ html {
 body {
     background-color: var(--bg-page);
     color: var(--text-secondary);
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family:
+        "Plus Jakarta Sans",
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
     font-weight: 400;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -139,7 +154,7 @@ img {
 
 .topbar {
     background: var(--navy-950);
-    color: #9BB3CE;
+    color: #9bb3ce;
     font-size: 12.5px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
@@ -175,7 +190,7 @@ img {
     display: flex;
     align-items: center;
     gap: 16px;
-    color: #BDD0E4;
+    color: #bdd0e4;
 }
 
 .topbar-meta-item {
@@ -224,10 +239,14 @@ img {
 }
 
 .hero-overlay::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 85% 20%, rgba(6, 182, 212, 0.15), transparent 40%);
+    background: radial-gradient(
+        circle at 85% 20%,
+        rgba(6, 182, 212, 0.15),
+        transparent 40%
+    );
 }
 
 .hero-content {
@@ -261,13 +280,13 @@ img {
 }
 
 .hero-badge-gold {
-    color: #FCD34D;
+    color: #fcd34d;
     border-color: rgba(252, 211, 77, 0.35);
     background: rgba(245, 158, 11, 0.15);
 }
 
 .hero-title {
-    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
     font-size: clamp(28px, 4.4vw, 48px);
     font-weight: 800;
     letter-spacing: -0.025em;
@@ -278,7 +297,7 @@ img {
 }
 
 .hero-title span {
-    background: linear-gradient(135deg, #FFFFFF 0%, #BAE6FD 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #bae6fd 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -286,7 +305,7 @@ img {
 .hero-subtitle {
     font-size: clamp(16px, 2vw, 20px);
     font-weight: 500;
-    color: #E2E8F0;
+    color: #e2e8f0;
     max-width: 800px;
     margin-bottom: 22px;
     line-height: 1.45;
@@ -305,7 +324,7 @@ img {
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #F1F5F9;
+    color: #f1f5f9;
     font-weight: 500;
 }
 
@@ -416,7 +435,7 @@ img {
 }
 
 .nav-links a.active::before {
-    content: '';
+    content: "";
     width: 6px;
     height: 6px;
     background: var(--blue-600);
@@ -466,7 +485,7 @@ img {
 }
 
 .page-title {
-    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
     font-size: clamp(26px, 3.2vw, 36px);
     font-weight: 800;
     letter-spacing: -0.02em;
@@ -504,7 +523,7 @@ img {
 
 .deadlines-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
@@ -520,7 +539,7 @@ img {
 }
 
 .deadline-card::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -530,7 +549,7 @@ img {
 }
 
 .deadline-card:nth-child(2)::before {
-    background: linear-gradient(90deg, var(--gold-500), #FCD34D);
+    background: linear-gradient(90deg, var(--gold-500), #fcd34d);
 }
 
 .deadline-card:hover {
@@ -566,7 +585,7 @@ img {
     font-size: 20px;
     font-weight: 800;
     color: var(--navy-900);
-    font-family: 'Outfit', sans-serif;
+    font-family: "Outfit", sans-serif;
 }
 
 /* ==========================================================================
@@ -589,11 +608,16 @@ img {
 }
 
 .form-section:hover {
-    border-color: #CBDCEF;
+    border-color: #cbdcef;
 }
 
 .section-header {
-    background: linear-gradient(90deg, var(--navy-950) 0%, var(--navy-900) 50%, var(--navy-850) 100%);
+    background: linear-gradient(
+        90deg,
+        var(--navy-950) 0%,
+        var(--navy-900) 50%,
+        var(--navy-850) 100%
+    );
     color: var(--white);
     padding: 18px 24px;
     display: flex;
@@ -619,7 +643,7 @@ img {
 
 .section-title {
     margin: 0;
-    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
     font-size: 17px;
     font-weight: 700;
     letter-spacing: 0.04em;
@@ -633,7 +657,7 @@ img {
 
 .section-intro-hint {
     background: var(--blue-50);
-    border: 1px solid #C8E2FA;
+    border: 1px solid #c8e2fa;
     border-radius: var(--radius-md);
     padding: 12px 16px;
     margin-bottom: 20px;
@@ -808,7 +832,7 @@ textarea {
 /* File Upload Dropzone */
 .file-upload-box {
     background: var(--slate-50);
-    border: 2px dashed #BACFE5;
+    border: 2px dashed #bacfe5;
     border-radius: var(--radius-lg);
     padding: 24px;
     text-align: center;
@@ -877,7 +901,7 @@ textarea {
 
 .session-item:hover {
     background: var(--white);
-    border-color: #B4D3F2;
+    border-color: #b4d3f2;
     box-shadow: 0 4px 12px rgba(10, 30, 54, 0.05);
 }
 
@@ -947,7 +971,7 @@ textarea {
 /* Consent Card */
 .consent-card {
     background: var(--blue-50);
-    border: 1px solid #C4DFF7;
+    border: 1px solid #c4dff7;
     border-radius: var(--radius-lg);
     padding: 16px 20px;
     margin-top: 10px;
@@ -981,7 +1005,11 @@ textarea {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: linear-gradient(135deg, var(--blue-600) 0%, var(--navy-850) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--blue-600) 0%,
+        var(--navy-850) 100%
+    );
     color: var(--white);
     border: none;
     border-radius: var(--radius-pill);
@@ -997,7 +1025,7 @@ textarea {
 .btn-submit:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 26px rgba(29, 108, 181, 0.45);
-    background: linear-gradient(135deg, #247CD0 0%, var(--navy-900) 100%);
+    background: linear-gradient(135deg, #247cd0 0%, var(--navy-900) 100%);
 }
 
 .btn-submit:active {
@@ -1015,7 +1043,7 @@ textarea {
 /* Alerts & Errors */
 .alert-banner {
     background: var(--rose-50);
-    border: 1px solid #FECDD3;
+    border: 1px solid #fecdd3;
     color: var(--rose-700);
     padding: 14px 18px;
     border-radius: var(--radius-lg);
@@ -1058,7 +1086,7 @@ textarea {
 }
 
 .editorial-content h2 {
-    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
     font-size: 22px;
     font-weight: 700;
     color: var(--navy-900);
@@ -1096,7 +1124,7 @@ textarea {
 
 .highlight-card:hover {
     background: var(--white);
-    border-color: #B9D6F3;
+    border-color: #b9d6f3;
     box-shadow: var(--shadow-subtle);
 }
 
@@ -1208,7 +1236,7 @@ textarea {
 
 .room-card:hover {
     transform: translateY(-2px);
-    border-color: #B5D2F1;
+    border-color: #b5d2f1;
     box-shadow: var(--shadow-card-hover);
 }
 
@@ -1217,7 +1245,7 @@ textarea {
 }
 
 .room-title {
-    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
     font-size: 19px;
     font-weight: 700;
     color: var(--navy-900);
@@ -1274,7 +1302,7 @@ textarea {
 }
 
 .hotel-name {
-    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
     font-size: 26px;
     font-weight: 800;
     color: var(--navy-900);
@@ -1342,7 +1370,7 @@ textarea {
 }
 
 .thanks-title {
-    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-family: "Outfit", "Plus Jakarta Sans", sans-serif;
     font-size: 28px;
     font-weight: 800;
     color: var(--navy-900);
@@ -1401,7 +1429,7 @@ textarea {
 
 .site-footer {
     background: var(--navy-950);
-    color: #94A3B8;
+    color: #94a3b8;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 14px;
     padding: 48px 0 32px;
@@ -1424,7 +1452,7 @@ textarea {
 }
 
 .footer-brand {
-    font-family: 'Outfit', sans-serif;
+    font-family: "Outfit", sans-serif;
     font-size: 18px;
     font-weight: 800;
     color: var(--white);
@@ -1445,7 +1473,7 @@ textarea {
 }
 
 .footer-links a {
-    color: #94A3B8;
+    color: #94a3b8;
     text-decoration: none;
     font-size: 13.5px;
 }
@@ -1460,7 +1488,7 @@ textarea {
     align-items: center;
     padding-top: 24px;
     font-size: 12.5px;
-    color: #64748B;
+    color: #64748b;
     flex-wrap: wrap;
     gap: 12px;
 }
