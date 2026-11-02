@@ -19,6 +19,13 @@ class AdminRegistrationTest extends TestCase
         config()->set('apsn.admin.password', 'secret');
     }
 
+    public function test_admin_root_url_redirects_to_registrations(): void
+    {
+        $response = $this->get('/admin');
+
+        $response->assertRedirect('/admin/registrations');
+    }
+
     public function test_unauthenticated_admin_is_redirected_to_login_page(): void
     {
         $response = $this->get(route('admin.registrations.index'));

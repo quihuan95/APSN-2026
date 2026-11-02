@@ -17,6 +17,7 @@ Route::redirect('/trang-trong', '/khach-san-ve-tinh');
 Route::get('/khach-san-ve-tinh', [PageController::class, 'satellite'])->name('satellite');
 
 // Admin Authentication
+Route::redirect('/admin', '/admin/registrations');
 Route::get('/admin/login', [AdminAuthController::class, 'create'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'store'])->name('admin.login.store');
 Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('admin.logout');
