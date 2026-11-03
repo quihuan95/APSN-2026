@@ -39,6 +39,7 @@ return [
         'Council member',
         'Government official',
         'Industry/NMP',
+        'APSN',
     ],
 
     'passport_types' => [

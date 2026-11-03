@@ -59,7 +59,9 @@ class RegistrationController extends Controller
             'dietary_other' => ['nullable', 'required_if:dietary,other', 'string', 'max:255'],
             'accessibility' => ['required', 'string', 'max:500'],
             'consent' => ['accepted'],
-        ], $sessionRules));
+        ], $sessionRules), [], [
+            'nationality' => 'economy',
+        ]);
 
         $data['passport_copy_path'] = $request->file('passport_copy')->store('passports');
         $data['consent'] = true;

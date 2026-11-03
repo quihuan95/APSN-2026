@@ -107,7 +107,7 @@ class RegistrationController extends Controller
             fwrite($output, "\xEF\xBB\xBF");
             fputcsv($output, [
                 'ID', 'Submitted At', 'Full Name', 'Title', 'Gender', 'Date of Birth',
-                'APEC Economy', 'Organization', 'Position', 'Attending As', 'Nationality',
+                'APEC Economy', 'Organization', 'Position', 'Attending As', 'Economy',
                 'Passport Type', 'Passport Number', 'Passport Expiry', 'Visa Status',
                 'Visa Email', 'Sessions', 'Arrival', 'Arrival Flight', 'Departure',
                 'Departure Flight', 'Hotel', 'Contact Email', 'Phone', 'Dietary',

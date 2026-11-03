@@ -39,7 +39,7 @@
         <section class="panel detail-card">
             <h2>Passport &amp; Visa</h2>
             <dl>
-                <div><dt>Nationality</dt><dd>{{ $registration->nationality }}</dd></div>
+                <div><dt>Economy</dt><dd>{{ $registration->nationality }}</dd></div>
                 <div><dt>Passport type</dt><dd>{{ $registration->passport_type }}</dd></div>
                 <div><dt>Passport number</dt><dd>{{ $registration->passport_number }}</dd></div>
                 <div><dt>Passport expiry</dt><dd>{{ $registration->passport_expiry?->format('d M Y') }}</dd></div>

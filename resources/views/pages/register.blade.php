@@ -153,13 +153,13 @@
             </div>
             <div class="section-body">
                 <div class="form-grid">
-                    <!-- Nationality -->
+                    <!-- Economy -->
                     <label class="field">
-                        <span class="field-label">Nationality <em class="req">*</em></span>
+                        <span class="field-label">Economy <em class="req">*</em></span>
                         <select name="nationality" required>
-                            <option value="">-- Select Country / Nationality --</option>
-                            @foreach (config('apsn.countries') as $code => $country)
-                                <option value="{{ $country }}" @selected(old('nationality') === $country)>{{ $country }}</option>
+                            <option value="">-- Select Economy --</option>
+                            @foreach (config('apsn.countries') as $code => $economy)
+                                <option value="{{ $economy }}" @selected(old('nationality') === $economy)>{{ $economy }}</option>
                             @endforeach
                         </select>
                         @error('nationality') <p class="error-text">{{ $message }}</p> @enderror

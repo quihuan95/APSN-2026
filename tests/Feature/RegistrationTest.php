@@ -79,7 +79,10 @@ class RegistrationTest extends TestCase
 
     public function test_content_pages_load(): void
     {
-        $this->get(route('register'))->assertOk()->assertSee('APSN Forum 2026');
+        $this->get(route('register'))
+            ->assertOk()
+            ->assertSee('APSN Forum 2026')
+            ->assertSee('APSN');
         $this->get(route('register.thanks'))->assertOk()->assertSee('Your registration has been received');
         $this->get(route('ho-chi-minh'))->assertOk()->assertSee('Thành phố Hồ Chí Minh');
         $this->get(route('rex'))->assertOk()->assertSee('Presidential Suite');
