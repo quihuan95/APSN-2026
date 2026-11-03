@@ -1554,3 +1554,42 @@ textarea {
         display: none;
     }
 }
+
+
+/* Flatpickr Theme Customization */
+.flatpickr-calendar {
+    font-family: inherit;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 12px 36px -4px rgba(10, 30, 54, 0.2);
+    border: 1px solid var(--border-card);
+    background: #ffffff;
+}
+
+.flatpickr-calendar.hasTime .flatpickr-time {
+    border-top: 1px solid var(--border-card);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+    background: var(--blue-600) !important;
+    border-color: var(--blue-600) !important;
+    font-weight: 700;
+}
+
+.flatpickr-day:hover {
+    background: var(--blue-100) !important;
+}
+
+.flatpickr-months .flatpickr-month {
+    color: var(--navy-900);
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+    font-weight: 700;
+}
+
+.flatpickr-time input:hover,
+.flatpickr-time input:focus {
+    background: var(--blue-50);
+}

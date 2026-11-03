@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('vendor/flatpickr/flatpickr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/site.css') }}">
 </head>
 <body>
@@ -42,10 +43,9 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                     APEC Port Services Network
                 </span>
-                <span class="hero-badge hero-badge-gold">Annual Summit 2026</span>
             </div>
             <h1 class="hero-title">
-                APSN Forum 2026 <span>&amp; Council Meeting</span>
+                APSN Forum 2026 <span>&amp; Council Meeting 2026</span>
             </h1>
             <p class="hero-subtitle">
                 Welcome to Ho Chi Minh City, Viet Nam's dynamic maritime and economic gateway
@@ -121,5 +121,6 @@
             </div>
         </div>
     </footer>
+    <script src="{{ asset('vendor/flatpickr/flatpickr.min.js') }}"></script>
 </body>
 </html>

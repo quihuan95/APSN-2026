@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Registration — APSN Forum 2026 and Council Meeting')
+@section('title', 'Registration — APSN Forum 2026 and Council Meeting 2026')
 
 @section('content')
     <div class="page-intro">
@@ -98,7 +98,7 @@
                     <!-- Date of Birth -->
                     <label class="field">
                         <span class="field-label">Date of birth <em class="req">*</em></span>
-                        <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" required>
+                        <input type="text" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" placeholder="YYYY-MM-DD" lang="en-US" required>
                         @error('date_of_birth') <p class="error-text">{{ $message }}</p> @enderror
                     </label>
 
@@ -184,7 +184,7 @@
                     <!-- Passport Expiry -->
                     <label class="field">
                         <span class="field-label">Date of expiry <em class="req">*</em></span>
-                        <input type="date" name="passport_expiry" value="{{ old('passport_expiry') }}" required>
+                        <input type="text" id="passport_expiry" name="passport_expiry" value="{{ old('passport_expiry') }}" placeholder="YYYY-MM-DD" lang="en-US" required>
                         <span class="field-helper">Your passport must remain valid for at least six months from your date of entry into Viet Nam.</span>
                         @error('passport_expiry') <p class="error-text">{{ $message }}</p> @enderror
                     </label>
@@ -288,7 +288,7 @@
                 <div class="form-grid">
                     <label class="field">
                         <span class="field-label">Arrival date &amp; time</span>
-                        <input type="datetime-local" name="arrival_at" value="{{ old('arrival_at') }}">
+                        <input type="text" id="arrival_at" name="arrival_at" value="{{ old('arrival_at') }}" placeholder="YYYY-MM-DD HH:MM" lang="en-US">
                         @error('arrival_at') <p class="error-text">{{ $message }}</p> @enderror
                     </label>
 
@@ -300,7 +300,7 @@
 
                     <label class="field">
                         <span class="field-label">Departure date &amp; time</span>
-                        <input type="datetime-local" name="departure_at" value="{{ old('departure_at') }}">
+                        <input type="text" id="departure_at" name="departure_at" value="{{ old('departure_at') }}" placeholder="YYYY-MM-DD HH:MM" lang="en-US">
                         @error('departure_at') <p class="error-text">{{ $message }}</p> @enderror
                     </label>
 
@@ -414,6 +414,42 @@
 
             visaStatusInputs.forEach((input) => input.addEventListener('change', updateVisaEmailField));
             updateVisaEmailField();
+
+            if (typeof flatpickr !== 'undefined') {
+                flatpickr('#date_of_birth', {
+                    dateFormat: 'Y-m-d',
+                    maxDate: 'today',
+                    disableMobile: true,
+                    altInput: true,
+                    altFormat: 'F j, Y',
+                });
+
+                flatpickr('#passport_expiry', {
+                    dateFormat: 'Y-m-d',
+                    minDate: 'today',
+                    disableMobile: true,
+                    altInput: true,
+                    altFormat: 'F j, Y',
+                });
+
+                flatpickr('#arrival_at', {
+                    enableTime: true,
+                    dateFormat: 'Y-m-d H:i',
+                    time_24hr: true,
+                    disableMobile: true,
+                    altInput: true,
+                    altFormat: 'F j, Y - H:i',
+                });
+
+                flatpickr('#departure_at', {
+                    enableTime: true,
+                    dateFormat: 'Y-m-d H:i',
+                    time_24hr: true,
+                    disableMobile: true,
+                    altInput: true,
+                    altFormat: 'F j, Y - H:i',
+                });
+            }
         });
     </script>
 @endsection
