@@ -26,7 +26,7 @@ class RegistrationFactory extends Factory
             'organization' => fake()->company(),
             'position' => 'Director',
             'attending_as' => 'Council member',
-            'nationality' => 'Singaporean',
+            'nationality' => 'Singapore',
             'passport_type' => 'Diplomatic Passport',
             'passport_number' => fake()->bothify('E#######'),
             'passport_expiry' => fake()->dateTimeBetween('+1 year', '+5 years'),

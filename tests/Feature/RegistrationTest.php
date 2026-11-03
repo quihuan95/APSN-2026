@@ -30,7 +30,7 @@ class RegistrationTest extends TestCase
             'organization' => 'Port Authority',
             'position' => 'Director',
             'attending_as' => 'Council member',
-            'nationality' => 'Singaporean',
+            'nationality' => 'Singapore',
             'passport_type' => 'Diplomatic Passport',
             'passport_number' => 'E998877',
             'passport_expiry' => '2031-06-01',

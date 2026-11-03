@@ -156,7 +156,12 @@
                     <!-- Nationality -->
                     <label class="field">
                         <span class="field-label">Nationality <em class="req">*</em></span>
-                        <input type="text" name="nationality" value="{{ old('nationality') }}" placeholder="e.g. Singaporean, Australian, Vietnamese" required>
+                        <select name="nationality" required>
+                            <option value="">-- Select Country / Nationality --</option>
+                            @foreach (config('apsn.countries') as $code => $country)
+                                <option value="{{ $country }}" @selected(old('nationality') === $country)>{{ $country }}</option>
+                            @endforeach
+                        </select>
                         @error('nationality') <p class="error-text">{{ $message }}</p> @enderror
                     </label>
 
