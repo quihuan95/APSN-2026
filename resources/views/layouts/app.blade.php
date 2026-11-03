@@ -48,7 +48,7 @@
                 APSN Forum 2026 <span>&amp; Council Meeting 2026</span>
             </h1>
             <p class="hero-subtitle">
-                Welcome to Ho Chi Minh City, Viet Nam's dynamic maritime and economic gateway
+                The APEC APSN is an Affiliate Network and reports directly to the APEC Transportation Working Group (TPTWG). The mandate of the APSN is to promote economically sustainable ports by strengthening cooperation, developing best practices and guidelines, enhancing supply chain effectiveness, building capacity and stimulating voluntary information sharing among port and port-related industries and services in the Asia-Pacific region.
             </p>
             <div class="hero-meta-strip">
                 <div class="hero-meta-item">
