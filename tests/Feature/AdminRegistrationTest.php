@@ -134,4 +134,70 @@ class AdminRegistrationTest extends TestCase
         $this->assertStringContainsString("'=Dangerous Formula", $response->streamedContent());
         $this->assertStringContainsString('delegate@example.com', $response->streamedContent());
     }
+
+    public function test_unauthenticated_user_cannot_delete_registration(): void
+    {
+        $registration = Registration::factory()->create();
+
+        $response = $this->delete(route('admin.registrations.destroy', $registration));
+
+        $response->assertRedirect(route('admin.login'));
+        $this->assertDatabaseHas('registrations', ['id' => $registration->id]);
+    }
+
+    public function test_authenticated_admin_can_delete_registration_and_removes_passport_file(): void
+    {
+        Storage::fake();
+        Storage::put('passports/passport-to-delete.pdf', 'test-content');
+
+        $registration = Registration::factory()->create([
+            'full_name' => 'John Doe',
+            'passport_copy_path' => 'passports/passport-to-delete.pdf',
+        ]);
+
+        $response = $this->withSession(['admin_authenticated' => true])
+            ->delete(route('admin.registrations.destroy', $registration));
+
+        $response->assertRedirect(route('admin.registrations.index'));
+        $response->assertSessionHas('status');
+
+        $this->assertDatabaseMissing('registrations', ['id' => $registration->id]);
+        Storage::assertMissing('passports/passport-to-delete.pdf');
+    }
+
+    public function test_authenticated_admin_can_bulk_delete_registrations(): void
+    {
+        Storage::fake();
+        Storage::put('passports/doc1.pdf', 'doc1');
+        Storage::put('passports/doc2.pdf', 'doc2');
+
+        $reg1 = Registration::factory()->create(['passport_copy_path' => 'passports/doc1.pdf']);
+        $reg2 = Registration::factory()->create(['passport_copy_path' => 'passports/doc2.pdf']);
+        $reg3 = Registration::factory()->create();
+
+        $response = $this->withSession(['admin_authenticated' => true])
+            ->delete(route('admin.registrations.bulk-destroy'), [
+                'ids' => [$reg1->id, $reg2->id],
+            ]);
+
+        $response->assertRedirect(route('admin.registrations.index'));
+        $response->assertSessionHas('status', '2 registration(s) deleted successfully.');
+
+        $this->assertDatabaseMissing('registrations', ['id' => $reg1->id]);
+        $this->assertDatabaseMissing('registrations', ['id' => $reg2->id]);
+        $this->assertDatabaseHas('registrations', ['id' => $reg3->id]);
+
+        Storage::assertMissing('passports/doc1.pdf');
+        Storage::assertMissing('passports/doc2.pdf');
+    }
+
+    public function test_bulk_delete_validates_ids_presence(): void
+    {
+        $response = $this->withSession(['admin_authenticated' => true])
+            ->delete(route('admin.registrations.bulk-destroy'), [
+                'ids' => [],
+            ]);
+
+        $response->assertSessionHasErrors('ids');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Registration;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -41,6 +42,45 @@ class RegistrationController extends Controller
     public function show(Registration $registration): View
     {
         return view('admin.registrations.show', ['registration' => $registration]);
+    }
+
+    public function destroy(Registration $registration): RedirectResponse
+    {
+        $fullName = $registration->full_name;
+        $id = $registration->id;
+
+        if ($registration->passport_copy_path && Storage::exists($registration->passport_copy_path)) {
+            Storage::delete($registration->passport_copy_path);
+        }
+
+        $registration->delete();
+
+        return redirect()
+            ->route('admin.registrations.index')
+            ->with('status', "Registration #{$id} ({$fullName}) was deleted successfully.");
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:registrations,id'],
+        ]);
+
+        $registrations = Registration::whereIn('id', $validated['ids'])->get();
+        $count = $registrations->count();
+
+        foreach ($registrations as $registration) {
+            if ($registration->passport_copy_path && Storage::exists($registration->passport_copy_path)) {
+                Storage::delete($registration->passport_copy_path);
+            }
+
+            $registration->delete();
+        }
+
+        return redirect()
+            ->route('admin.registrations.index')
+            ->with('status', "{$count} registration(s) deleted successfully.");
     }
 
     public function passport(Registration $registration): StreamedResponse

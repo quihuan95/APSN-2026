@@ -25,6 +25,7 @@ Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('adm
 // Admin Protected Area
 Route::prefix('admin')->name('admin.')->middleware(EnsureAdminAuthenticated::class)->group(function (): void {
     Route::get('/registrations/export', [AdminRegistrationController::class, 'export'])->name('registrations.export');
+    Route::delete('/registrations/bulk', [AdminRegistrationController::class, 'bulkDestroy'])->name('registrations.bulk-destroy');
     Route::get('/registrations/{registration}/passport', [AdminRegistrationController::class, 'passport'])->name('registrations.passport');
-    Route::resource('registrations', AdminRegistrationController::class)->only(['index', 'show']);
+    Route::resource('registrations', AdminRegistrationController::class)->only(['index', 'show', 'destroy']);
 });
