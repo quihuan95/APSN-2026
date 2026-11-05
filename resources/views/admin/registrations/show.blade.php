@@ -10,7 +10,9 @@
             <p>Submitted {{ $registration->created_at?->format('d F Y, H:i') }}</p>
         </div>
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <a href="{{ route('admin.registrations.passport', $registration) }}" class="button button-primary">Download Passport</a>
+            @if($registration->passport_copy_path)
+                <a href="{{ route('admin.registrations.passport', $registration) }}" class="button button-primary">Download Passport</a>
+            @endif
             <form method="post" action="{{ route('admin.registrations.destroy', $registration) }}" style="display: inline; margin: 0;">
                 @csrf
                 @method('DELETE')

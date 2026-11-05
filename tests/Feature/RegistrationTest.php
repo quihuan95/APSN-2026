@@ -60,9 +60,11 @@ class RegistrationTest extends TestCase
             $rendered = $mail->render();
 
             return str_contains($rendered, 'Your registration has been received')
-                && str_contains($rendered, 'Registration ID.:')
+                && str_contains($rendered, 'Registration ID:')
                 && str_contains($rendered, 'Rex Hotel Saigon')
-                && str_contains($rendered, 'Tran Van An');
+                && str_contains($rendered, 'Tran Van An')
+                && ! str_contains($rendered, '**Event:**')
+                && ! str_contains($rendered, '&lt;br&gt;');
         });
         Mail::assertSent(NewRegistrationNotification::class, 'admin@example.com');
     }
@@ -75,6 +77,46 @@ class RegistrationTest extends TestCase
 
         $response->assertSessionHasErrors('visa_email');
         $this->assertSame(0, Registration::count());
+    }
+
+    public function test_registration_can_be_stored_without_a_passport_copy(): void
+    {
+        Mail::fake();
+
+        $response = $this->post(route('register.store'), [
+            'title' => 'Dr.',
+            'full_name' => 'Tran Van An',
+            'gender' => 'Male',
+            'date_of_birth' => '1985-03-02',
+            'economy' => 'Singapore',
+            'organization' => 'Port Authority',
+            'position' => 'Director',
+            'attending_as' => 'Council member',
+            'nationality' => 'Singapore',
+            'passport_type' => 'Diplomatic Passport',
+            'passport_number' => 'E998877',
+            'passport_expiry' => '2031-06-01',
+            'visa_status' => 'Visa-exempt',
+            'sessions' => [
+                'forum' => 'Yes',
+                'technical_visit' => 'No',
+                'council' => 'Yes',
+                'welcome_dinner' => 'No',
+                'council_dinner' => 'Yes',
+            ],
+            'email' => 'an@example.com',
+            'phone' => '+6590000000',
+            'dietary' => 'Halal',
+            'accessibility' => 'None',
+            'consent' => '1',
+        ]);
+
+        $response->assertRedirect(route('register.thanks'));
+        $this->assertDatabaseHas('registrations', [
+            'email' => 'an@example.com',
+            'passport_copy_path' => null,
+        ]);
+        Mail::assertSent(RegistrationConfirmation::class);
     }
 
     public function test_content_pages_load(): void

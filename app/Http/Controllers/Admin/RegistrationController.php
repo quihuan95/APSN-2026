@@ -85,12 +85,14 @@ class RegistrationController extends Controller
 
     public function passport(Registration $registration): StreamedResponse
     {
-        abort_unless(Storage::exists($registration->passport_copy_path), 404);
+        $passportCopyPath = $registration->passport_copy_path;
 
-        $extension = pathinfo($registration->passport_copy_path, PATHINFO_EXTENSION);
+        abort_unless($passportCopyPath && Storage::exists($passportCopyPath), 404);
+
+        $extension = pathinfo($passportCopyPath, PATHINFO_EXTENSION);
 
         return Storage::download(
-            $registration->passport_copy_path,
+            $passportCopyPath,
             "passport-{$registration->id}.{$extension}",
         );
     }

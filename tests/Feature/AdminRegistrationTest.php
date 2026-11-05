@@ -119,6 +119,23 @@ class AdminRegistrationTest extends TestCase
             ->assertDownload("passport-{$registration->id}.pdf");
     }
 
+    public function test_passport_download_is_unavailable_when_registration_has_no_passport_copy(): void
+    {
+        Storage::fake();
+        $registration = Registration::factory()->create([
+            'passport_copy_path' => null,
+        ]);
+
+        $this->withSession(['admin_authenticated' => true])
+            ->get(route('admin.registrations.show', $registration))
+            ->assertOk()
+            ->assertDontSee('Download Passport');
+
+        $this->withSession(['admin_authenticated' => true])
+            ->get(route('admin.registrations.passport', $registration))
+            ->assertNotFound();
+    }
+
     public function test_authenticated_admin_can_export_registrations_to_csv(): void
     {
         Registration::factory()->create([

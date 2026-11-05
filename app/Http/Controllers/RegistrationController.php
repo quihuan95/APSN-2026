@@ -39,7 +39,7 @@ class RegistrationController extends Controller
             'passport_type' => ['required', Rule::in(config('apsn.passport_types'))],
             'passport_number' => ['required', 'string', 'max:50'],
             'passport_expiry' => ['required', 'date', 'after:today'],
-            'passport_copy' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'passport_copy' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
             'visa_status' => ['required', Rule::in(config('apsn.visa_statuses'))],
             'visa_email' => [
                 Rule::excludeUnless($request->input('visa_status') === config('apsn.e_visa_status')),
@@ -63,7 +63,7 @@ class RegistrationController extends Controller
             'nationality' => 'economy',
         ]);
 
-        $data['passport_copy_path'] = $request->file('passport_copy')->store('passports');
+        $data['passport_copy_path'] = $request->file('passport_copy')?->store('passports');
         $data['consent'] = true;
         unset($data['passport_copy']);
 

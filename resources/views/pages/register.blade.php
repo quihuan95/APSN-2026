@@ -236,7 +236,7 @@
 
           <!-- Passport Copy Upload -->
           <div class="field col-full">
-            <span class="field-label">Upload a copy of the passport data page <em class="req">*</em></span>
+            <span class="field-label">Upload a copy of the passport data page (Submission of the passport biodata page is mandatory for participants joining the port visit to meet port security requirements.)</span>
             <div class="file-upload-box">
               <div class="upload-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -245,7 +245,7 @@
                   <line x1="12" y1="3" x2="12" y2="15"></line>
                 </svg>
               </div>
-              <input type="file" name="passport_copy" accept=".jpg,.jpeg,.png,.pdf" class="file-upload-input" required>
+              <input type="file" name="passport_copy" accept=".jpg,.jpeg,.png,.pdf" class="file-upload-input">
               <p class="field-helper" style="margin-top: 8px;">Accepted formats: <strong>JPG, PNG, or PDF</strong>. Maximum size: <strong>5 MB</strong>.</p>
               <div class="upload-confidentiality">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
