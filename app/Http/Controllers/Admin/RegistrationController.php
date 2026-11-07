@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\RegistrationsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Registration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class RegistrationController extends Controller
@@ -97,72 +100,11 @@ class RegistrationController extends Controller
         );
     }
 
-    public function export(): StreamedResponse
+    public function export(): BinaryFileResponse
     {
-        return response()->streamDownload(function (): void {
-            $output = fopen('php://output', 'w');
-
-            if ($output === false) {
-                return;
-            }
-
-            fwrite($output, "\xEF\xBB\xBF");
-            fputcsv($output, [
-                'ID', 'Submitted At', 'Full Name', 'Title', 'Gender', 'Date of Birth',
-                'APEC Economy', 'Organization', 'Position', 'Attending As', 'Economy',
-                'Passport Type', 'Passport Number', 'Passport Expiry', 'Visa Status',
-                'Visa Email', 'Sessions', 'Arrival', 'Arrival Flight', 'Departure',
-                'Departure Flight', 'Hotel', 'Contact Email', 'Phone', 'Dietary',
-                'Accessibility',
-            ]);
-
-            Registration::query()
-                ->orderBy('id')
-                ->each(function (Registration $registration) use ($output): void {
-                    fputcsv($output, array_map($this->sanitizeCsvCell(...), [
-                        $registration->id,
-                        $registration->created_at?->format('Y-m-d H:i:s'),
-                        $registration->full_name,
-                        $registration->title === 'other' ? $registration->title_other : $registration->title,
-                        $registration->gender,
-                        $registration->date_of_birth?->format('Y-m-d'),
-                        $registration->economy,
-                        $registration->organization,
-                        $registration->position,
-                        $registration->attending_as,
-                        $registration->nationality,
-                        $registration->passport_type,
-                        $registration->passport_number,
-                        $registration->passport_expiry?->format('Y-m-d'),
-                        $registration->visa_status,
-                        $registration->visa_email,
-                        implode('; ', array_keys(array_filter($registration->sessions, fn (string $value): bool => $value === 'Yes'))),
-                        $registration->arrival_at?->format('Y-m-d H:i:s'),
-                        $registration->arrival_flight,
-                        $registration->departure_at?->format('Y-m-d H:i:s'),
-                        $registration->departure_flight,
-                        $registration->hotel_name,
-                        $registration->email,
-                        $registration->phone,
-                        $registration->dietary === 'other' ? $registration->dietary_other : $registration->dietary,
-                        $registration->accessibility,
-                    ]));
-                });
-
-            fclose($output);
-        }, 'apsn-registrations-'.now()->format('Y-m-d').'.csv', [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-        ]);
-    }
-
-    private function sanitizeCsvCell(mixed $value): string
-    {
-        $value = (string) ($value ?? '');
-
-        if (preg_match('/^[=+\-@\t\r]/', $value) === 1) {
-            return "'{$value}";
-        }
-
-        return $value;
+        return Excel::download(
+            new RegistrationsExport,
+            'apsn-registrations-'.now()->format('Y-m-d').'.xlsx',
+        );
     }
 }

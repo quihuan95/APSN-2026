@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Registration;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Tests\TestCase;
 
 class AdminRegistrationTest extends TestCase
@@ -136,20 +138,34 @@ class AdminRegistrationTest extends TestCase
             ->assertNotFound();
     }
 
-    public function test_authenticated_admin_can_export_registrations_to_csv(): void
+    public function test_authenticated_admin_can_export_registrations_to_excel_with_passport_hyperlink(): void
     {
-        Registration::factory()->create([
+        config()->set('app.url', 'https://apsn.test');
+
+        $registration = Registration::factory()->create([
             'full_name' => '=Dangerous Formula',
             'email' => 'delegate@example.com',
+            'passport_copy_path' => 'passports/delegate.pdf',
         ]);
 
         $response = $this->withSession(['admin_authenticated' => true])
             ->get(route('admin.registrations.export'));
 
         $response->assertOk();
-        $response->assertDownload('apsn-registrations-'.now()->format('Y-m-d').'.csv');
-        $this->assertStringContainsString("'=Dangerous Formula", $response->streamedContent());
-        $this->assertStringContainsString('delegate@example.com', $response->streamedContent());
+        $response->assertDownload('apsn-registrations-'.now()->format('Y-m-d').'.xlsx');
+
+        $spreadsheet = IOFactory::load($response->baseResponse->getFile()->getPathname());
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $this->assertSame('Passport Copy', $sheet->getCell('O1')->getValue());
+        $this->assertSame('Open Passport', $sheet->getCell('O2')->getValue());
+        $this->assertSame(
+            'https://apsn.test'.route('admin.registrations.passport', $registration, absolute: false),
+            $sheet->getCell('O2')->getHyperlink()->getUrl(),
+        );
+        $this->assertSame('=Dangerous Formula', $sheet->getCell('C2')->getValue());
+        $this->assertSame(DataType::TYPE_STRING, $sheet->getCell('C2')->getDataType());
+        $this->assertSame('delegate@example.com', $sheet->getCell('X2')->getValue());
     }
 
     public function test_unauthenticated_user_cannot_delete_registration(): void
