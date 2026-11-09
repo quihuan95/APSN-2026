@@ -21,7 +21,7 @@ Your registration has been received. Please save this email for future reference
 
 **Affiliation:** {{ $registration->organization }}
 
-**Country:** {{ $registration->economy }}
+**Economy:** {{ $registration->economy }}
 
 **Email:** {{ $registration->email }}
 

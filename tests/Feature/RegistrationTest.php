@@ -63,6 +63,8 @@ class RegistrationTest extends TestCase
                 && str_contains($rendered, 'Registration ID:')
                 && str_contains($rendered, 'Rex Hotel Saigon')
                 && str_contains($rendered, 'Tran Van An')
+                && str_contains($rendered, 'Economy:')
+                && ! str_contains($rendered, 'Country:')
                 && ! str_contains($rendered, '**Event:**')
                 && ! str_contains($rendered, '&lt;br&gt;');
         });
