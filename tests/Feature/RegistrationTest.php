@@ -22,6 +22,7 @@ class RegistrationTest extends TestCase
         config()->set('apsn.admin.email', 'admin@example.com');
 
         $response = $this->post(route('register.store'), [
+            'submission_token' => '11111111-1111-4111-8111-111111111111',
             'title' => 'Dr.',
             'full_name' => 'Tran Van An',
             'gender' => 'Male',
@@ -86,6 +87,7 @@ class RegistrationTest extends TestCase
         Mail::fake();
 
         $response = $this->post(route('register.store'), [
+            'submission_token' => '22222222-2222-4222-8222-222222222222',
             'title' => 'Dr.',
             'full_name' => 'Tran Van An',
             'gender' => 'Male',
@@ -119,6 +121,57 @@ class RegistrationTest extends TestCase
             'passport_copy_path' => null,
         ]);
         Mail::assertSent(RegistrationConfirmation::class);
+    }
+
+    public function test_duplicate_submission_creates_one_registration_and_sends_one_set_of_emails(): void
+    {
+        Storage::fake();
+        Mail::fake();
+        config()->set('apsn.admin.email', 'admin@example.com');
+        $data = [
+            'submission_token' => '33333333-3333-4333-8333-333333333333',
+            'title' => 'Dr.',
+            'full_name' => 'Tran Van An',
+            'gender' => 'Male',
+            'date_of_birth' => '1985-03-02',
+            'economy' => 'Singapore',
+            'organization' => 'Port Authority',
+            'position' => 'Director',
+            'attending_as' => 'Council member',
+            'nationality' => 'Singapore',
+            'passport_type' => 'Diplomatic Passport',
+            'passport_number' => 'E998877',
+            'passport_expiry' => '2031-06-01',
+            'visa_status' => 'Visa-exempt',
+            'sessions' => [
+                'forum' => 'Yes',
+                'technical_visit' => 'No',
+                'council' => 'Yes',
+                'welcome_dinner' => 'No',
+                'council_dinner' => 'Yes',
+            ],
+            'email' => 'an@example.com',
+            'phone' => '+6590000000',
+            'dietary' => 'Halal',
+            'accessibility' => 'None',
+            'consent' => '1',
+        ];
+
+        $firstResponse = $this->post(route('register.store'), [
+            ...$data,
+            'passport_copy' => UploadedFile::fake()->create('passport.pdf', 120, 'application/pdf'),
+        ]);
+        $duplicateResponse = $this->post(route('register.store'), [
+            ...$data,
+            'passport_copy' => UploadedFile::fake()->create('passport.pdf', 120, 'application/pdf'),
+        ]);
+
+        $firstResponse->assertRedirect(route('register.thanks'));
+        $duplicateResponse->assertRedirect(route('register.thanks'));
+        $this->assertSame(1, Registration::query()->count());
+        $this->assertCount(1, Storage::allFiles('passports'));
+        Mail::assertSent(RegistrationConfirmation::class, 1);
+        Mail::assertSent(NewRegistrationNotification::class, 1);
     }
 
     public function test_content_pages_load(): void

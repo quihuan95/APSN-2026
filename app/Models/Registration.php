@@ -12,6 +12,7 @@ class Registration extends Model
     use HasFactory;
 
     protected $fillable = [
+        'submission_token',
         'title',
         'title_other',
         'full_name',

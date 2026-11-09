@@ -58,6 +58,7 @@
 
   <form method="post" action="{{ route('register.store') }}" enctype="multipart/form-data" class="registration-form">
     @csrf
+    <input type="hidden" name="submission_token" value="{{ old('submission_token', $submissionToken) }}">
 
     <!-- 01: PERSONAL INFORMATION -->
     <section class="form-section">
@@ -494,6 +495,14 @@
       const visaStatusInputs = document.querySelectorAll('input[name="visa_status"]');
       const visaEmailField = document.getElementById('visa-email-field');
       const visaEmailInput = visaEmailField.querySelector('input[name="visa_email"]');
+      const registrationForm = document.querySelector('.registration-form');
+      const submitButton = registrationForm.querySelector('button[type="submit"]');
+
+      registrationForm.addEventListener('submit', () => {
+        submitButton.disabled = true;
+        submitButton.setAttribute('aria-busy', 'true');
+        submitButton.querySelector('span').textContent = 'Submitting...';
+      });
 
       const updateVisaEmailField = () => {
         const selectedStatus = document.querySelector('input[name="visa_status"]:checked')?.value;

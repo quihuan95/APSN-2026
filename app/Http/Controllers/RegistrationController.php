@@ -8,6 +8,8 @@ use App\Models\Registration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -15,7 +17,9 @@ class RegistrationController extends Controller
 {
     public function create(): View
     {
-        return view('pages.register');
+        return view('pages.register', [
+            'submissionToken' => (string) Str::uuid(),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -26,6 +30,7 @@ class RegistrationController extends Controller
         }
 
         $data = $request->validate(array_merge([
+            'submission_token' => ['required', 'uuid'],
             'title' => ['required', Rule::in([...config('apsn.titles'), 'other'])],
             'title_other' => ['nullable', 'required_if:title,other', 'string', 'max:100'],
             'full_name' => ['required', 'string', 'max:255'],
@@ -63,7 +68,8 @@ class RegistrationController extends Controller
             'nationality' => 'economy',
         ]);
 
-        $data['passport_copy_path'] = $request->file('passport_copy')?->store('passports');
+        $passportCopyPath = $request->file('passport_copy')?->store('passports');
+        $data['passport_copy_path'] = $passportCopyPath;
         $data['consent'] = true;
         unset($data['passport_copy']);
 
@@ -74,7 +80,23 @@ class RegistrationController extends Controller
             $data['dietary_other'] = null;
         }
 
-        $registration = Registration::create($data);
+        $submissionToken = $data['submission_token'];
+        unset($data['submission_token']);
+
+        $registration = Registration::query()->firstOrCreate(
+            ['submission_token' => $submissionToken],
+            $data,
+        );
+
+        if (! $registration->wasRecentlyCreated) {
+            if ($passportCopyPath !== null) {
+                Storage::delete($passportCopyPath);
+            }
+
+            return redirect()
+                ->route('register.thanks')
+                ->with('registration_name', $registration->full_name);
+        }
 
         Mail::to($registration->email)->send(new RegistrationConfirmation($registration));
 

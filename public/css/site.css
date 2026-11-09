@@ -1032,6 +1032,13 @@ textarea {
     transform: translateY(0);
 }
 
+.btn-submit:disabled {
+    cursor: wait;
+    opacity: 0.65;
+    transform: none;
+    box-shadow: none;
+}
+
 .form-footnote {
     font-size: 13.5px;
     color: var(--slate-500);
