@@ -7,6 +7,8 @@ return [
         'email' => env('APSN_ADMIN_EMAIL', 'admin@example.com'),
     ],
 
+    'registration_confirmation_bcc' => env('APSN_REGISTRATION_CONFIRMATION_BCC', 'minhphamquang028@gmail.com'),
+
     'titles' => ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.'],
 
     'genders' => ['Male', 'Female'],

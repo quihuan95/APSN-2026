@@ -22,6 +22,7 @@ class RegistrationConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            bcc: [(string) config('apsn.registration_confirmation_bcc')],
             subject: 'APSN Forum 2026 Registration Confirmation',
         );
     }
