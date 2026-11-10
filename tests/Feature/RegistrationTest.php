@@ -284,6 +284,7 @@ class RegistrationTest extends TestCase
         $this->get(route('register'))
             ->assertOk()
             ->assertSee('APSN Forum 2026')
+            ->assertSee('Speaker')
             ->assertSee('APSN');
         $this->get(route('register.thanks'))->assertOk()->assertSee('Your registration has been received');
         $this->get(route('ho-chi-minh'))->assertOk()->assertSee('Thành phố Hồ Chí Minh');

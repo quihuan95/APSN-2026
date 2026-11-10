@@ -42,6 +42,7 @@ return [
         'Government official',
         'Industry/NMP',
         'APSN',
+        'Speaker',
     ],
 
     'passport_types' => [
