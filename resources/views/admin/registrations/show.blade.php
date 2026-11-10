@@ -7,7 +7,7 @@
         <div>
             <a href="{{ route('admin.registrations.index') }}" class="back-link">← Back to registrations</a>
             <h1>{{ $registration->full_name }}</h1>
-            <p>Submitted {{ $registration->created_at?->format('d F Y, H:i') }}</p>
+            <p>Submitted {{ $registration->created_at?->format('d F Y, H:i') }}@if($registration->is_invited) · Invited guest @endif</p>
         </div>
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
             @if($registration->passport_copy_path)
@@ -31,21 +31,21 @@
                 <div><dt>Title</dt><dd>{{ $registration->title === 'other' ? $registration->title_other : $registration->title }}</dd></div>
                 <div><dt>Gender</dt><dd>{{ $registration->gender }}</dd></div>
                 <div><dt>Date of birth</dt><dd>{{ $registration->date_of_birth?->format('d M Y') }}</dd></div>
-                <div><dt>Economy</dt><dd>{{ $registration->economy }}</dd></div>
+                <div><dt>Economy</dt><dd>{{ $registration->economy ?: '—' }}</dd></div>
                 <div><dt>Organization</dt><dd>{{ $registration->organization }}</dd></div>
                 <div><dt>Position</dt><dd>{{ $registration->position }}</dd></div>
-                <div><dt>Attending as</dt><dd>{{ $registration->attending_as }}</dd></div>
+                <div><dt>Attending as</dt><dd>{{ $registration->attending_as ?: '—' }}</dd></div>
             </dl>
         </section>
 
         <section class="panel detail-card">
             <h2>Passport &amp; Visa</h2>
             <dl>
-                <div><dt>Economy</dt><dd>{{ $registration->nationality }}</dd></div>
-                <div><dt>Passport type</dt><dd>{{ $registration->passport_type }}</dd></div>
-                <div><dt>Passport number</dt><dd>{{ $registration->passport_number }}</dd></div>
-                <div><dt>Passport expiry</dt><dd>{{ $registration->passport_expiry?->format('d M Y') }}</dd></div>
-                <div><dt>Visa status</dt><dd>{{ $registration->visa_status }}</dd></div>
+                <div><dt>Economy</dt><dd>{{ $registration->nationality ?: '—' }}</dd></div>
+                <div><dt>Passport type</dt><dd>{{ $registration->passport_type ?: '—' }}</dd></div>
+                <div><dt>Passport number</dt><dd>{{ $registration->passport_number ?: '—' }}</dd></div>
+                <div><dt>Passport expiry</dt><dd>{{ $registration->passport_expiry?->format('d M Y') ?: '—' }}</dd></div>
+                <div><dt>Visa status</dt><dd>{{ $registration->visa_status ?: '—' }}</dd></div>
                 @if($registration->visa_email)
                     <div><dt>E-visa email</dt><dd><a href="mailto:{{ $registration->visa_email }}">{{ $registration->visa_email }}</a></dd></div>
                 @endif

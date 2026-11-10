@@ -59,8 +59,8 @@
                             </td>
                             <td><strong>{{ $registration->full_name }}</strong><small>{{ $registration->email }}</small></td>
                             <td>{{ $registration->organization }}</td>
-                            <td>{{ $registration->economy }}</td>
-                            <td>{{ $registration->attending_as }}</td>
+                            <td>{{ $registration->economy ?: '—' }}</td>
+                            <td>{{ $registration->is_invited ? 'Invited guest' : $registration->attending_as }}</td>
                             <td>{{ $registration->created_at?->format('d M Y, H:i') }}</td>
                             <td style="text-align: right; vertical-align: middle; white-space: nowrap;">
                                 <div style="display: inline-flex; gap: 6px; align-items: center;">

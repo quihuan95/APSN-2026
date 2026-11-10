@@ -13,6 +13,7 @@ class Registration extends Model
 
     protected $fillable = [
         'submission_token',
+        'is_invited',
         'title',
         'title_other',
         'full_name',
@@ -51,6 +52,7 @@ class Registration extends Model
             'sessions' => 'array',
             'arrival_at' => 'datetime',
             'departure_at' => 'datetime',
+            'is_invited' => 'boolean',
             'consent' => 'boolean',
         ];
     }

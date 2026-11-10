@@ -21,8 +21,10 @@ Your registration has been received. Please save this email for future reference
 
 **Affiliation:** {{ $registration->organization }}
 
+@if ($registration->economy)
 **Economy:** {{ $registration->economy }}
 
+@endif
 **Email:** {{ $registration->email }}
 
 We look forward to seeing you in Ho Chi Minh City!

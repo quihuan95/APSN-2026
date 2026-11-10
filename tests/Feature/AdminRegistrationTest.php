@@ -166,6 +166,70 @@ class AdminRegistrationTest extends TestCase
         $this->assertSame('=Dangerous Formula', $sheet->getCell('C2')->getValue());
         $this->assertSame(DataType::TYPE_STRING, $sheet->getCell('C2')->getDataType());
         $this->assertSame('delegate@example.com', $sheet->getCell('X2')->getValue());
+        $this->assertSame('Registration Type', $sheet->getCell('AB1')->getValue());
+        $this->assertSame('Delegate', $sheet->getCell('AB2')->getValue());
+    }
+
+    public function test_admin_lists_shows_and_exports_an_invited_guest_without_delegate_fields(): void
+    {
+        $registration = Registration::factory()->create([
+            'is_invited' => true,
+            'full_name' => 'Le Thi Guest',
+            'email' => 'guest@example.com',
+            'organization' => 'Host Secretariat',
+            'economy' => null,
+            'attending_as' => null,
+            'nationality' => null,
+            'passport_type' => null,
+            'passport_number' => null,
+            'passport_expiry' => null,
+            'passport_copy_path' => null,
+            'visa_status' => null,
+            'visa_email' => null,
+            'arrival_at' => null,
+            'arrival_flight' => null,
+            'departure_at' => null,
+            'departure_flight' => null,
+            'hotel_name' => null,
+            'sessions' => [
+                'forum' => 'Yes',
+                'technical_visit' => 'No',
+                'council' => 'No',
+                'welcome_dinner' => 'No',
+                'council_dinner' => 'Yes',
+            ],
+        ]);
+
+        $this->withSession(['admin_authenticated' => true])
+            ->get(route('admin.registrations.index'))
+            ->assertOk()
+            ->assertSee('Le Thi Guest')
+            ->assertSee('Invited guest')
+            ->assertSee('Host Secretariat');
+
+        $this->withSession(['admin_authenticated' => true])
+            ->get(route('admin.registrations.show', $registration))
+            ->assertOk()
+            ->assertSee('Invited guest')
+            ->assertSee('Technical Visit (16 Dec)')
+            ->assertSee('APSN Council Meeting 2026 (16 - 17 Dec) - Council members only')
+            ->assertDontSee('Download Passport');
+
+        $response = $this->withSession(['admin_authenticated' => true])
+            ->get(route('admin.registrations.export'));
+
+        $response->assertOk();
+        $sheet = IOFactory::load($response->baseResponse->getFile()->getPathname())->getActiveSheet();
+
+        $this->assertSame('Registration Type', $sheet->getCell('AB1')->getValue());
+        $this->assertSame('Invited guest', $sheet->getCell('AB2')->getValue());
+        $this->assertSame('Le Thi Guest', $sheet->getCell('C2')->getValue());
+        $this->assertNull($sheet->getCell('G2')->getValue());
+        $this->assertNull($sheet->getCell('J2')->getValue());
+        $this->assertNull($sheet->getCell('O2')->getValue());
+        $this->assertSame('forum; council_dinner', $sheet->getCell('R2')->getValue());
+        $this->assertNull($sheet->getCell('T2')->getValue());
+        $this->assertSame('guest@example.com', $sheet->getCell('X2')->getValue());
     }
 
     public function test_unauthenticated_user_cannot_delete_registration(): void

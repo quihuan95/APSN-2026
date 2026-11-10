@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Registration — APSN Forum 2026 and Council Meeting 2026')
+@section('title', ($invited ? 'Invited Guest Registration' : 'Registration').' — APSN Forum 2026 and Council Meeting 2026')
 
 @section('content')
   <div class="page-intro">
@@ -14,9 +14,14 @@
       </svg>
       Official Accreditation &amp; Registration Portal
     </span>
-    <h1 class="page-title">Registration — APSN Forum 2026 &amp; APSN Council Meeting 2026</h1>
-    <p class="page-lede">Viet Nam Maritime and Waterway Administration (VIMAWA), Ministry of Construction of Viet Nam is pleased to host The APEC Port Services Network (APSN) Forum
-      2026 and APSN Council Meeting 2026 from 14 to 18 December 2026 at Rex Hotel Saigon — Ho Chi Minh City, Viet Nam.</p>
+    @if ($invited)
+      <h1 class="page-title">Invited Guest Registration — APSN Forum 2026</h1>
+      <p class="page-lede">This form is for invited guests of the APSN Forum 2026, held from 14 to 18 December 2026 at Rex Hotel Saigon — Ho Chi Minh City, Viet Nam.</p>
+    @else
+      <h1 class="page-title">Registration — APSN Forum 2026 &amp; APSN Council Meeting 2026</h1>
+      <p class="page-lede">Viet Nam Maritime and Waterway Administration (VIMAWA), Ministry of Construction of Viet Nam is pleased to host The APEC Port Services Network (APSN) Forum
+        2026 and APSN Council Meeting 2026 from 14 to 18 December 2026 at Rex Hotel Saigon — Ho Chi Minh City, Viet Nam.</p>
+    @endif
   </div>
 
   <!-- Deadlines Status Cards -->
@@ -56,7 +61,7 @@
     </div>
   @endif
 
-  <form method="post" action="{{ route('register.store') }}" enctype="multipart/form-data" class="registration-form">
+  <form method="post" action="{{ $invited ? route('register.invited.store').'?invited' : route('register.store') }}" enctype="multipart/form-data" class="registration-form">
     @csrf
     <input type="hidden" name="submission_token" value="{{ old('submission_token', $submissionToken) }}">
 
@@ -127,19 +132,21 @@
             @enderror
           </label>
 
-          <!-- Economy -->
-          <label class="field">
-            <span class="field-label">APEC Economy <em class="req">*</em></span>
-            <select name="economy" required>
-              <option value="">-- Select Economy --</option>
-              @foreach (config('apsn.economies') as $economy)
-                <option value="{{ $economy }}" @selected(old('economy') === $economy)>{{ $economy }}</option>
-              @endforeach
-            </select>
-            @error('economy')
-              <p class="error-text">{{ $message }}</p>
-            @enderror
-          </label>
+          @unless ($invited)
+            <!-- Economy -->
+            <label class="field">
+              <span class="field-label">APEC Economy <em class="req">*</em></span>
+              <select name="economy" required>
+                <option value="">-- Select Economy --</option>
+                @foreach (config('apsn.economies') as $economy)
+                  <option value="{{ $economy }}" @selected(old('economy') === $economy)>{{ $economy }}</option>
+                @endforeach
+              </select>
+              @error('economy')
+                <p class="error-text">{{ $message }}</p>
+              @enderror
+            </label>
+          @endunless
 
           <!-- Organization -->
           <label class="field">
@@ -159,25 +166,28 @@
             @enderror
           </label>
 
-          <!-- Attending As -->
-          <div class="field col-full">
-            <span class="choice-title">Attending as <em class="req">*</em></span>
-            <div class="choices">
-              @foreach (config('apsn.roles') as $role)
-                <label>
-                  <input type="radio" name="attending_as" value="{{ $role }}" @checked(old('attending_as') === $role)>
-                  <span>{{ $role }}</span>
-                </label>
-              @endforeach
+          @unless ($invited)
+            <!-- Attending As -->
+            <div class="field col-full">
+              <span class="choice-title">Attending as <em class="req">*</em></span>
+              <div class="choices">
+                @foreach (config('apsn.roles') as $role)
+                  <label>
+                    <input type="radio" name="attending_as" value="{{ $role }}" @checked(old('attending_as') === $role)>
+                    <span>{{ $role }}</span>
+                  </label>
+                @endforeach
+              </div>
+              @error('attending_as')
+                <p class="error-text">{{ $message }}</p>
+              @enderror
             </div>
-            @error('attending_as')
-              <p class="error-text">{{ $message }}</p>
-            @enderror
-          </div>
+          @endunless
         </div>
       </div>
     </section>
 
+    @unless ($invited)
     <!-- 02: PASSPORT DETAILS / VISA ARRANGEMENT -->
     <section class="form-section">
       <div class="section-header">
@@ -286,11 +296,12 @@
         </div>
       </div>
     </section>
+    @endunless
 
     <!-- 03: MEETING PARTICIPATION -->
     <section class="form-section">
       <div class="section-header">
-        <span class="section-number">03</span>
+        <span class="section-number">{{ $invited ? '02' : '03' }}</span>
         <h2 class="section-title">Meeting Participation</h2>
       </div>
       <div class="section-body">
@@ -306,6 +317,7 @@
 
         <div class="session-matrix">
           @foreach (config('apsn.sessions') as $key => $label)
+            @continue($invited && in_array($key, ['technical_visit', 'council'], true))
             <div class="session-item">
               <div class="session-info">
                 <div class="session-name">{{ $label }}</div>
@@ -340,6 +352,7 @@
       </div>
     </section>
 
+    @unless ($invited)
     <!-- 04: TRAVEL DETAILS -->
     <section class="form-section">
       <div class="section-header">
@@ -399,11 +412,12 @@
         </div>
       </div>
     </section>
+    @endunless
 
     <!-- 05: CONTACT & SPECIAL NEEDS -->
     <section class="form-section">
       <div class="section-header">
-        <span class="section-number">05</span>
+        <span class="section-number">{{ $invited ? '03' : '05' }}</span>
         <h2 class="section-title">Contact &amp; Special Needs</h2>
       </div>
       <div class="section-body">
@@ -494,7 +508,7 @@
       const eVisaStatus = @json(config('apsn.e_visa_status'));
       const visaStatusInputs = document.querySelectorAll('input[name="visa_status"]');
       const visaEmailField = document.getElementById('visa-email-field');
-      const visaEmailInput = visaEmailField.querySelector('input[name="visa_email"]');
+      const visaEmailInput = visaEmailField?.querySelector('input[name="visa_email"]');
       const registrationForm = document.querySelector('.registration-form');
       const submitButton = registrationForm.querySelector('button[type="submit"]');
 
@@ -505,6 +519,10 @@
       });
 
       const updateVisaEmailField = () => {
+        if (!visaEmailField || !visaEmailInput) {
+          return;
+        }
+
         const selectedStatus = document.querySelector('input[name="visa_status"]:checked')?.value;
         const requiresEmail = selectedStatus === eVisaStatus;
 
@@ -528,31 +546,37 @@
           altFormat: 'F j, Y',
         });
 
-        flatpickr('#passport_expiry', {
-          dateFormat: 'Y-m-d',
-          minDate: 'today',
-          disableMobile: true,
-          altInput: true,
-          altFormat: 'F j, Y',
-        });
+        if (document.getElementById('passport_expiry')) {
+          flatpickr('#passport_expiry', {
+            dateFormat: 'Y-m-d',
+            minDate: 'today',
+            disableMobile: true,
+            altInput: true,
+            altFormat: 'F j, Y',
+          });
+        }
 
-        flatpickr('#arrival_at', {
-          enableTime: true,
-          dateFormat: 'Y-m-d H:i',
-          time_24hr: true,
-          disableMobile: true,
-          altInput: true,
-          altFormat: 'F j, Y - H:i',
-        });
+        if (document.getElementById('arrival_at')) {
+          flatpickr('#arrival_at', {
+            enableTime: true,
+            dateFormat: 'Y-m-d H:i',
+            time_24hr: true,
+            disableMobile: true,
+            altInput: true,
+            altFormat: 'F j, Y - H:i',
+          });
+        }
 
-        flatpickr('#departure_at', {
-          enableTime: true,
-          dateFormat: 'Y-m-d H:i',
-          time_24hr: true,
-          disableMobile: true,
-          altInput: true,
-          altFormat: 'F j, Y - H:i',
-        });
+        if (document.getElementById('departure_at')) {
+          flatpickr('#departure_at', {
+            enableTime: true,
+            dateFormat: 'Y-m-d H:i',
+            time_24hr: true,
+            disableMobile: true,
+            altInput: true,
+            altFormat: 'F j, Y - H:i',
+          });
+        }
       }
     });
   </script>

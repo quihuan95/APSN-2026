@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RegistrationController::class, 'create'])->name('register');
 Route::post('/dang-ky', [RegistrationController::class, 'store'])->name('register.store');
+Route::get('/registration', [RegistrationController::class, 'createInvited'])->name('register.invited');
+Route::post('/registration', [RegistrationController::class, 'storeInvited'])->name('register.invited.store');
+Route::redirect('/dang-ky-khach-moi', '/registration?invited');
 Route::get('/cam-on', [RegistrationController::class, 'thanks'])->name('register.thanks');
 
 Route::get('/ho-chi-minh', [PageController::class, 'hoChiMinh'])->name('ho-chi-minh');

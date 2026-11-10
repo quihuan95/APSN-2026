@@ -39,7 +39,7 @@ class RegistrationsExport extends StringValueBinder implements FromQuery, Should
             'Passport Type', 'Passport Number', 'Passport Expiry', 'Passport Copy',
             'Visa Status', 'Visa Email', 'Sessions', 'Arrival', 'Arrival Flight',
             'Departure', 'Departure Flight', 'Hotel', 'Contact Email', 'Phone',
-            'Dietary', 'Accessibility',
+            'Dietary', 'Accessibility', 'Registration Type',
         ];
     }
 
@@ -86,6 +86,7 @@ class RegistrationsExport extends StringValueBinder implements FromQuery, Should
             $registration->phone,
             $registration->dietary === 'other' ? $registration->dietary_other : $registration->dietary,
             $registration->accessibility,
+            $registration->is_invited ? 'Invited guest' : 'Delegate',
         ];
     }
 

@@ -174,6 +174,111 @@ class RegistrationTest extends TestCase
         Mail::assertSent(NewRegistrationNotification::class, 1);
     }
 
+    public function test_registration_without_invited_query_redirects_to_the_standard_form(): void
+    {
+        $this->get(route('register.invited'))
+            ->assertRedirect(route('register'));
+
+        $this->post(route('register.invited.store'), [
+            'full_name' => 'Le Thi Guest',
+            'email' => 'guest@example.com',
+        ])->assertRedirect(route('register'));
+
+        $this->assertSame(0, Registration::query()->count());
+    }
+
+    public function test_invited_guest_form_hides_delegate_only_fields(): void
+    {
+        $this->get(route('register.invited').'?invited')
+            ->assertOk()
+            ->assertSee(route('register.invited.store').'?invited', false)
+            ->assertSee('Invited Guest Registration')
+            ->assertSee('APSN Forum (15 Dec)')
+            ->assertSee('Welcome Dinner')
+            ->assertSee('Dinner (16 December)')
+            ->assertDontSee('Attending as')
+            ->assertDontSee('APEC Economy')
+            ->assertDontSee('Passport Details')
+            ->assertDontSee('Travel Details')
+            ->assertDontSee('Technical Visit')
+            ->assertDontSee('APSN Council Meeting 2026');
+    }
+
+    public function test_invited_guest_registration_stores_without_delegate_only_fields(): void
+    {
+        Mail::fake();
+        config()->set('apsn.admin.email', 'admin@example.com');
+
+        $response = $this->post(route('register.invited.store').'?invited', [
+            'submission_token' => '44444444-4444-4444-8444-444444444444',
+            'title' => 'Ms.',
+            'full_name' => 'Le Thi Guest',
+            'gender' => 'Female',
+            'date_of_birth' => '1990-01-15',
+            'economy' => 'Singapore',
+            'organization' => 'Host Secretariat',
+            'position' => 'Guest',
+            'attending_as' => 'Council member',
+            'nationality' => 'Singapore',
+            'passport_number' => 'E000000',
+            'visa_status' => 'Visa-exempt',
+            'sessions' => [
+                'forum' => 'Yes',
+                'technical_visit' => 'Yes',
+                'council' => 'Yes',
+                'welcome_dinner' => 'No',
+                'council_dinner' => 'Yes',
+            ],
+            'arrival_flight' => 'VN650',
+            'email' => 'guest@example.com',
+            'phone' => '+84900000000',
+            'dietary' => 'Vegetarian',
+            'accessibility' => 'None',
+            'consent' => '1',
+        ]);
+
+        $response->assertRedirect(route('register.thanks'));
+
+        $registration = Registration::query()->first();
+        $this->assertNotNull($registration);
+        $this->assertTrue($registration->is_invited);
+        $this->assertNull($registration->economy);
+        $this->assertNull($registration->attending_as);
+        $this->assertNull($registration->nationality);
+        $this->assertNull($registration->passport_number);
+        $this->assertNull($registration->visa_status);
+        $this->assertNull($registration->arrival_flight);
+        $this->assertSame('Yes', $registration->sessions['forum']);
+        $this->assertSame('No', $registration->sessions['technical_visit']);
+        $this->assertSame('No', $registration->sessions['council']);
+        $this->assertSame('Yes', $registration->sessions['council_dinner']);
+        Mail::assertSent(RegistrationConfirmation::class, function (RegistrationConfirmation $mail): bool {
+            return ! str_contains($mail->render(), 'Economy:');
+        });
+        Mail::assertSent(NewRegistrationNotification::class, function (NewRegistrationNotification $mail): bool {
+            $rendered = $mail->render();
+
+            return str_contains($rendered, 'Invited guest')
+                && ! str_contains($rendered, 'Economy:');
+        });
+    }
+
+    public function test_invited_guest_registration_still_requires_personal_and_contact_fields(): void
+    {
+        $response = $this->post(route('register.invited.store').'?invited', []);
+
+        $response->assertSessionHasErrors(['full_name', 'email', 'consent', 'sessions.forum']);
+        $response->assertSessionDoesntHaveErrors([
+            'economy',
+            'attending_as',
+            'passport_number',
+            'visa_status',
+            'sessions.technical_visit',
+            'sessions.council',
+        ]);
+        $this->assertSame(0, Registration::query()->count());
+    }
+
     public function test_content_pages_load(): void
     {
         $this->get(route('register'))
