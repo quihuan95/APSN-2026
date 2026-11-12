@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Mail\RegistrationConfirmation;
 use App\Models\Registration;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -230,6 +232,47 @@ class AdminRegistrationTest extends TestCase
         $this->assertSame('forum; council_dinner', $sheet->getCell('R2')->getValue());
         $this->assertNull($sheet->getCell('T2')->getValue());
         $this->assertSame('guest@example.com', $sheet->getCell('X2')->getValue());
+    }
+
+    public function test_authenticated_admin_can_resend_a_confirmation_email(): void
+    {
+        Mail::fake();
+        $registration = Registration::factory()->create([
+            'full_name' => 'Alex Delegate',
+            'email' => 'alex@example.com',
+        ]);
+
+        $this->withSession(['admin_authenticated' => true])
+            ->get(route('admin.registrations.index'))
+            ->assertOk()
+            ->assertSee('Resend email');
+
+        $this->withSession(['admin_authenticated' => true])
+            ->get(route('admin.registrations.show', $registration))
+            ->assertOk()
+            ->assertSee('Resend confirmation');
+
+        $this->from(route('admin.registrations.show', $registration))
+            ->withSession(['admin_authenticated' => true])
+            ->post(route('admin.registrations.confirmation', $registration))
+            ->assertRedirect(route('admin.registrations.show', $registration))
+            ->assertSessionHas('status', 'Confirmation email sent to alex@example.com.');
+
+        Mail::assertSent(RegistrationConfirmation::class, function (RegistrationConfirmation $mail) use ($registration): bool {
+            return $mail->hasTo('alex@example.com')
+                && $mail->registration->is($registration);
+        });
+    }
+
+    public function test_unauthenticated_user_cannot_resend_a_confirmation_email(): void
+    {
+        Mail::fake();
+        $registration = Registration::factory()->create();
+
+        $this->post(route('admin.registrations.confirmation', $registration))
+            ->assertRedirect(route('admin.login'));
+
+        Mail::assertNothingSent();
     }
 
     public function test_unauthenticated_user_cannot_delete_registration(): void

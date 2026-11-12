@@ -30,5 +30,6 @@ Route::prefix('admin')->name('admin.')->middleware(EnsureAdminAuthenticated::cla
     Route::get('/registrations/export', [AdminRegistrationController::class, 'export'])->name('registrations.export');
     Route::delete('/registrations/bulk', [AdminRegistrationController::class, 'bulkDestroy'])->name('registrations.bulk-destroy');
     Route::get('/registrations/{registration}/passport', [AdminRegistrationController::class, 'passport'])->name('registrations.passport');
+    Route::post('/registrations/{registration}/confirmation', [AdminRegistrationController::class, 'resendConfirmation'])->name('registrations.confirmation');
     Route::resource('registrations', AdminRegistrationController::class)->only(['index', 'show', 'destroy']);
 });

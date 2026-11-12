@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\RegistrationsExport;
 use App\Http\Controllers\Controller;
+use App\Mail\RegistrationConfirmation;
 use App\Models\Registration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -84,6 +86,13 @@ class RegistrationController extends Controller
         return redirect()
             ->route('admin.registrations.index')
             ->with('status', "{$count} registration(s) deleted successfully.");
+    }
+
+    public function resendConfirmation(Registration $registration): RedirectResponse
+    {
+        Mail::to($registration->email)->send(new RegistrationConfirmation($registration));
+
+        return back()->with('status', "Confirmation email sent to {$registration->email}.");
     }
 
     public function passport(Registration $registration): StreamedResponse

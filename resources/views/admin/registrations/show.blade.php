@@ -13,6 +13,12 @@
             @if($registration->passport_copy_path)
                 <a href="{{ route('admin.registrations.passport', $registration) }}" class="button button-primary">Download Passport</a>
             @endif
+            <form method="post" action="{{ route('admin.registrations.confirmation', $registration) }}" style="display: inline; margin: 0;">
+                @csrf
+                <button type="submit" class="button" onclick="return confirm('Resend the confirmation email to {{ addslashes($registration->email) }}?');">
+                    Resend confirmation
+                </button>
+            </form>
             <form method="post" action="{{ route('admin.registrations.destroy', $registration) }}" style="display: inline; margin: 0;">
                 @csrf
                 @method('DELETE')

@@ -65,6 +65,12 @@
                             <td style="text-align: right; vertical-align: middle; white-space: nowrap;">
                                 <div style="display: inline-flex; gap: 6px; align-items: center;">
                                     <a href="{{ route('admin.registrations.show', $registration) }}" class="button button-sm">View</a>
+                                    <form method="post" action="{{ route('admin.registrations.confirmation', $registration) }}" style="display: inline; margin: 0;">
+                                        @csrf
+                                        <button type="submit" class="button button-sm" onclick="return confirm('Resend the confirmation email to {{ addslashes($registration->email) }}?');">
+                                            Resend email
+                                        </button>
+                                    </form>
                                     <form method="post" action="{{ route('admin.registrations.destroy', $registration) }}" style="display: inline; margin: 0;">
                                         @csrf
                                         @method('DELETE')
